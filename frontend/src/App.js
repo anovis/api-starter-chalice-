@@ -3,10 +3,18 @@ import logo from './logo.svg';
 import './App.css';
 import Accounts from './Accounts.js';
 import TransferForm from './TransferForm.js';
+import TransferList from './TransferList.js';
+
 
         const data = [
          {"nickname": "test1", "balance":100},
          {"nickname": "test2", "balance":200},
+         ];
+
+         const transfers_data = [
+          {"payee_id": "1", "payer_id": "2", "amount":100, "status":"canceled"},
+          {"payee_id": "2", "payer_id": "2", "amount":1003, "status":"success"},
+          {"payee_id": "3", "payer_id": "1", "amount":1004, "status":"canceled"},
          ];
 
 class App extends Component {
@@ -15,6 +23,7 @@ class App extends Component {
 
         this.state = {
           accounts: data,
+          transfers: transfers_data
         };
       }
 
@@ -56,7 +65,7 @@ class App extends Component {
                   <h3>Transfers</h3>
                   <br/>
 
-                  transferList.html
+                  <TransferList transfers={this.state.transfers} />
               </div>
           </div>
       </div>

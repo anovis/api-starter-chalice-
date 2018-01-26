@@ -7,13 +7,17 @@ class TransferForm extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
-        this.state = {accounts: this.props.accounts,transferFrom:0,transferTo:0};
+        this.onChange = this.onChange.bind(this);
+        this.state = {accounts: this.props.accounts,transferFrom:this.props.accounts[0].balance,transferTo:this.props.accounts[0].balance, amount:0, description:""};
       }
 
-     handleSubmit(event){
-        console.log(event);
-        event.preventDefault();
+     handleSubmit(e){
+        e.preventDefault();
      }
+
+      onChange(e){
+          this.setState({[e.target.id]:e.target.value})
+       }
 
       handleSelect(e){
 
@@ -33,6 +37,7 @@ class TransferForm extends Component {
         )
 
         return ( <div className="well well-sm">
+                    <form onSubmit={this.handleSubmit}>
          	            <p>From: <span id="transferFromAccount"></span></p>
                           <select onChange={this.handleSelect} className="form-control" id="transferFrom" >
                             {account_options}
@@ -51,17 +56,14 @@ class TransferForm extends Component {
 
                        	<br />
 
-                       	<form onSubmit={this.handleSubmit}>
+
                        		<p>Amount: <span id="transferAmount"></span></p>
-                       		<input id="amount" type="text" name="amount" />
+                       		<input id="amount" type="text" name="amount" onChange={this.onChange} />
                        		<br /><br />
                        		<p>Description: <span id="transferDescription"></span></p>
-                       		<input id="description" type="text" name="description" />
+                       		<input id="description" type="text" name="description" onChange={this.onChange} />
                        		<br /><br />
 
-
-                       		<input id="toAccount" type="hidden" name="toAccount" />
-                       		<input id="fromAccount" type="hidden" name="fromAccount" />
 
                        		<input type="submit" className="btn btn-primary" name="Confirm Transfer" />
                        	</form>

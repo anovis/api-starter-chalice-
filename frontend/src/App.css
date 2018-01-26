@@ -44,3 +44,11 @@
    font-size: 30px;
    color: green;
 }
+
+.canceled{
+    background-color: #dc143c;
+}
+
+.good{
+    background-color: #006400;
+}
