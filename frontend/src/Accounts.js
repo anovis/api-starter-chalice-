@@ -7,6 +7,10 @@ class Accounts extends Component {
          this.state = {accounts: this.props.accounts,};
       }
 
+     componentWillReceiveProps(nextProps){
+     this.setState({accounts:nextProps.accounts})
+     }
+
      render(){
 
         var html_rows = this.state.accounts.map((account) =>

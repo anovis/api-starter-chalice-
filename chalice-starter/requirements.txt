@@ -1,3 +1,2 @@
 chalice
 requests
-Jinja2

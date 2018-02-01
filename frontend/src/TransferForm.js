@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 
 
@@ -8,11 +9,22 @@ class TransferForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.state = {accounts: this.props.accounts,transferFrom:this.props.accounts[0].balance,transferTo:this.props.accounts[0].balance, amount:0, description:""};
+        this.state = {accounts: this.props.accounts,transferFrom:this.props.accounts[0].balance,transferTo:this.props.accounts[0].balance, amount:0, description:"", to:this.props.accounts[0]["_id"],from:this.props.accounts[0]["_id"]};
       }
+      componentWillReceiveProps(nextProps){
+               this.setState({accounts: nextProps.accounts,transferFrom:nextProps.accounts[0].balance,transferTo:nextProps.accounts[0].balance,})
+               }
 
      handleSubmit(e){
-        e.preventDefault();
+        const chalice_api = window.chalice_url
+        var data = {
+                    "fromAccount": this.state.from,
+                    "toAccount": this.state.to,
+                    "amount":this.state.amount,
+                    "description":this.state.description
+                  }
+        console.log(data)
+        axios.post(chalice_api + '/transfer', data).then(function(response){console.log(response)});
      }
 
       onChange(e){
@@ -24,7 +36,7 @@ class TransferForm extends Component {
              for (var i=0; i<this.state.accounts.length ; i++){
                 if (this.state.accounts[i].nickname === e.target.value )
                     {
-                    this.setState({[e.target.id]:this.state.accounts[i].balance})
+                    this.setState({[e.target.id]:this.state.accounts[i].balance, [e.target.name]:this.state.accounts[i]["_id"]})
                     }
              }
 
@@ -39,7 +51,7 @@ class TransferForm extends Component {
         return ( <div className="well well-sm">
                     <form onSubmit={this.handleSubmit}>
          	            <p>From: <span id="transferFromAccount"></span></p>
-                          <select onChange={this.handleSelect} className="form-control" id="transferFrom" >
+                          <select onChange={this.handleSelect} className="form-control" name="from" id="transferFrom" >
                             {account_options}
                           </select>
                           <br />
@@ -48,7 +60,7 @@ class TransferForm extends Component {
                        	<br />
 
                        	<p>To: <span id="transferToAccount"></span></p>
-                          <select onChange={this.handleSelect} className="form-control" id="transferTo">
+                          <select onChange={this.handleSelect} className="form-control" name="to" id="transferTo">
                             {account_options}
                           </select>
                           <br />

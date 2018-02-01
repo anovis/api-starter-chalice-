@@ -1,7 +1,6 @@
 from chalice import Chalice
 import requests
 import json
-from jinja2 import Environment, PackageLoader, select_autoescape
 import datetime
 
 app = Chalice(app_name='chalice-starter')

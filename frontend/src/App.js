@@ -8,14 +8,11 @@ import axios from 'axios';
 
 
         const data = [
-         {"nickname": "test1", "balance":100},
-         {"nickname": "test2", "balance":200},
+         {"nickname": "placeholder", "balance":100},
          ];
 
          const transfers_data = [
           {"payee_id": "1", "payer_id": "2", "amount":100, "status":"canceled"},
-          {"payee_id": "2", "payer_id": "2", "amount":1003, "status":"success"},
-          {"payee_id": "3", "payer_id": "1", "amount":1004, "status":"canceled"},
          ];
 
 class App extends Component {
@@ -28,14 +25,19 @@ class App extends Component {
         };
       }
     componentDidMount(){
-
-
-
-
+        const chalice_api = window.chalice_url
+        if (chalice_api != "CHALICE_API_ENDPOINT"){
+            axios.get(chalice_api + '/data')
+              .then(response => {
+                this.setState({accounts:response.data.data["accounts"],transfers:response.data.data["transfers"]})
+              })
+              .catch(error => {
+                console.log('Error fetching and parsing data', error);
+              });
+        }
     }
 
   render() {
-
     return (
       <div className="container-fluid">
 

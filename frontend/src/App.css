@@ -45,8 +45,8 @@
    color: green;
 }
 
-.canceled{
-    background-color: #dc143c;
+.pending{
+    background-color: #FFFF00;
 }
 
 .good{

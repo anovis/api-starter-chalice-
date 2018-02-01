@@ -6,12 +6,14 @@ class Accounts extends Component {
         super(props);
          this.state = {transfers: this.props.transfers,};
       }
+     componentWillReceiveProps(nextProps){
+         this.setState({transfers:nextProps.transfers})
+         }
 
      render(){
-
         var html_rows = this.state.transfers.map((transfer) =>
 
-            <tr className={( (transfer.status == 'canceled') ? 'canceled' : 'good')}>
+            <tr className={( (transfer.status == 'pending') ? 'pending' : 'good')}>
                 <td>{ transfer.payer_id }</td>
                 <td>{ transfer.payee_id }</td>
                 <td>${ transfer.amount }</td>
