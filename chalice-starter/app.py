@@ -8,7 +8,7 @@ app = Chalice(app_name='chalice-starter')
 apiKey = "3ab6d523a29713d557d8d75ee7d68325"
 
 
-@app.route('/', cors=True)
+@app.route('/data', cors=True)
 def index():
     # create the URL for the request
     accountsUrl = 'http://api.reimaginebanking.com/accounts?key={}'.format(apiKey)
@@ -38,15 +38,53 @@ def index():
             if transfersResponse.status_code == 200:
                 transfers.extend(json.loads(transfersResponse.text))
 
-        env = Environment(
-            loader=PackageLoader('chalice-starter', 'templates'),
-            autoescape=select_autoescape(['html', 'xml'])
-        )
-        template = env.get_template("notfound.html")
-
-        return template.render()
-
-        #  return template.render(accounts=accountsNoCards, format_price=format_price, transfers=transfers)
+        return {"data":{"transfers":transfers,"accounts":accountsNoCards}}
     else:
-        template = Template("notfound.html")
-        return template.render()
+        return {"data":{"transfers":[], "accounts":[]}}
+
+
+@app.route('/transfer', methods=['POST'], cors=True)
+def transfer():
+    request = app.current_request
+    json_body = request.json_body
+    # get values from the request (populated by user into the form on the UI)
+    # (added some error handling here for invalid form input)
+    fromAccount = json_body["fromAccount"]
+    if fromAccount == "":
+        return {"code":302}
+
+    toAccount = json_body["toAccount"]
+    if toAccount == "":
+        return {"code":302}
+
+    try:
+        amount = float(json_body["amount"]) # need to convert to an int or this fails
+    except ValueError:
+        amount = ""
+
+    description = json_body["description"]
+
+    # set values that are not included in the form
+    medium = "balance";
+    dateObject = datetime.date.today()
+    dateString = dateObject.strftime('%Y-%m-%d')
+
+    # set up payload for request
+    body = {
+        'medium' : medium,
+        'payee_id' : toAccount,
+        'amount' : amount,
+        'transaction_date' : dateString,
+        'description' : description
+    }
+
+    # make the request to create the transfer
+    url = "http://api.reimaginebanking.com/accounts/{}/transfers?key={}".format(fromAccount, apiKey)
+    response = requests.post(
+        url,
+        data=json.dumps(body),
+        headers={'content-type':'application/json'})
+
+
+    # redirect user to the same page, which should now show there latest transaction in the list
+    return {"data": "success"}

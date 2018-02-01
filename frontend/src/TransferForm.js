@@ -43,7 +43,7 @@ class TransferForm extends Component {
                             {account_options}
                           </select>
                           <br />
-                           <p className="red"> {this.state.transferFrom} </p>
+                           <p className="red"> {this.state.transferFrom - this.state.amount} </p>
 
                        	<br />
 
@@ -52,7 +52,7 @@ class TransferForm extends Component {
                             {account_options}
                           </select>
                           <br />
-                            <p className="green"> {this.state.transferTo} </p>
+                            <p className="green"> {this.state.transferTo + parseInt(this.state.amount)} </p>
 
                        	<br />
 
