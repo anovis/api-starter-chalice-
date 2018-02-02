@@ -3,8 +3,10 @@ import requests
 import json
 import datetime
 
+from config import apiKey
+
 app = Chalice(app_name='chalice-starter')
-apiKey = "3ab6d523a29713d557d8d75ee7d68325"
+
 
 
 @app.route('/data', cors=True)
